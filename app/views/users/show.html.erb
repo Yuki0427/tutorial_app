@@ -61,10 +61,25 @@
                         <%= button_to "退社", user_attendances_path(@user), class: "btn btn-xs btn-primary" %>
                       <% end %>
                   </td>
-                  <td></td>
+                  <td>
+                      <% if day.started_at.present? && day.finished_at.present? %>
+                        <%= working_times(day.started_at, day.finished_at) %>
+                        <% seconds = (day.finished_at - day.started_at).to_i %>
+                        <% @total_seconds = @total_seconds.to_i + seconds %>
+                      <% end %>
+                  </td>
                   <td></td>
               </tr>
             <% end %>
         </tbody>
+        
+        <tfoot>
+            <tr>
+                <td colspan = "2"><%= format_basic_time(@user.basic_time).to_f * @worked_sum %></td>
+                <td colspan = "6"></td>
+                <td><%= working_times_sum(@total_seconds) unless @total_seconds.nil? %></td>
+                <td></td>
+            </tr>
+        </tfoot>
     </table>
 </div>
